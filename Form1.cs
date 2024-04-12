@@ -186,8 +186,8 @@ namespace ConfigManipulator
         {
 
             XDocument doc = XDocument.Load(configPath);
-            XElement batchJobsElement = doc.Descendants("BatchJobs").First();
-            int currentID = batchJobsElement.Elements("BatchJob").Elements("JobID").Max(x => Int32.Parse(x.Value));
+            XElement jobs = doc.Descendants("Jobs").First();
+            int currentID = jobs.Elements("Job").Elements("JobID").Max(x => Int32.Parse(x.Value));
 
             List<string> windowDays = new List<string>();
             foreach (KeyValuePair<string, bool> item in DaysOpen)
@@ -198,7 +198,7 @@ namespace ConfigManipulator
                 }
             }
 
-            XElement BatchJob = new XElement("BatchJob",
+            XElement Job = new XElement("Job",
                     new XElement("JobID", currentID + 1),
                     new XElement("JobName", textBox_jobName.Text),
                     new XElement("JobType", dropdown_JobSelector.Text),
@@ -209,7 +209,7 @@ namespace ConfigManipulator
                     new XElement("WindowEnd", dateTimePicker_windowEnd.Text),
                     new XElement("WindowDays", String.Join("|", windowDays))
                 );
-            batchJobsElement.Add(BatchJob);
+            jobs.Add(Job);
             doc.Save(configPath);
         }
     }
